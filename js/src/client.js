@@ -6,6 +6,7 @@ async function addMeasurement(data) {
     try {
         await prisma.measurement.create({
             data: {
+                symbol: data.instId,
                 price: data.px,
                 size: data.sz,
                 timestamp: data.ts,

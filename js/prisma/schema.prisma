@@ -9,7 +9,19 @@ datasource db {
 
 model Measurement {
   id        Int    @id @default(autoincrement())
+  symbol    Symbol
   price     Float
   size      Float
   timestamp BigInt
+}
+
+enum Symbol {
+  BTC_USDT
+  ADA_USDT
+  ETH_USDT
+  DOGE_USDT
+  XRP_USDT
+  SOL_USDT
+  LTC_USDT
+  BNB_USDT
 }
