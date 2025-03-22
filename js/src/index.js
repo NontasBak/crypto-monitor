@@ -2,17 +2,8 @@ const WebSocket = require("ws");
 const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
-
-const SYMBOLS = [
-    "BTC-USDT",
-    "ADA-USDT",
-    "ETH-USDT",
-    "DOGE-USDT",
-    "XRP-USDT",
-    "SOL-USDT",
-    "LTC-USDT",
-    "BNB-USDT",
-];
+const { SYMBOLS } = require("./config.js");
+const { setup } = require("./setup.js");
 
 async function start() {
     const ws = new WebSocket(`wss://ws.okx.com:8443/ws/v5/public`);
@@ -39,6 +30,11 @@ async function start() {
     });
 }
 
-start().catch((error) => {
-    console.error(error);
-});
+async function main() {
+    try {
+        await setup();
+        start();
+    } catch (error) {
+        console.log(error);
+    }
+}
