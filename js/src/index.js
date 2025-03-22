@@ -4,6 +4,7 @@ const path = require("path");
 require("dotenv").config();
 const { SYMBOLS } = require("./config.js");
 const { setup } = require("./setup.js");
+const { addMeasurement } = require("./client.js");
 
 async function start() {
     const ws = new WebSocket(`wss://ws.okx.com:8443/ws/v5/public`);
@@ -26,7 +27,18 @@ async function start() {
 
     ws.on("message", (message) => {
         const response = JSON.parse(message);
-        console.log(response.data);
+        let measurement = response.data;
+        if (measurement) {
+            measurement = measurement[0];
+            measurement = {
+                ...measurement,
+                px: parseFloat(measurement.px),
+                sz: parseFloat(measurement.sz),
+                ts: parseInt(measurement.ts),
+            };
+            console.log(measurement);
+            addMeasurement(measurement);
+        }
     });
 }
 
@@ -38,3 +50,5 @@ async function main() {
         console.log(error);
     }
 }
+
+main();
