@@ -4,7 +4,7 @@ const path = require("path");
 require("dotenv").config();
 const { SYMBOLS } = require("./config.js");
 const { setup } = require("./setup.js");
-const { addMeasurement } = require("./client.js");
+const { addMeasurement, deleteDbRecords } = require("./client.js");
 
 async function start() {
     const ws = new WebSocket(`wss://ws.okx.com:8443/ws/v5/public`);
@@ -51,4 +51,5 @@ async function main() {
     }
 }
 
+// deleteDbRecords();
 main();

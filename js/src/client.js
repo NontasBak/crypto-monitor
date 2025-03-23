@@ -17,4 +17,9 @@ async function addMeasurement(data) {
     }
 }
 
-module.exports = { addMeasurement };
+async function deleteDbRecords() {
+    const deleteMeasurements = prisma.measurement.deleteMany();
+    await prisma.$transaction([deleteMeasurements]);
+}
+
+module.exports = { addMeasurement, deleteDbRecords };
