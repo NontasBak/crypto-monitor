@@ -17,6 +17,10 @@ async function calculateAverage(symbol, currentTimestamp) {
     }, 0);
 
     const average = weightedAveragePrice / totalVolume;
+
+    if (!average) {
+        return;
+    }
     await addAverage(symbol, average, currentTimestamp);
 }
 

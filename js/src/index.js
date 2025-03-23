@@ -12,6 +12,7 @@ const {
     getTime,
 } = require("date-fns");
 const { calculateAllAverages } = require("./moving-average.js");
+const { calculateAllCorrelations } = require("./pearson-corr.js");
 
 async function start() {
     const ws = new WebSocket(`wss://ws.okx.com:8443/ws/v5/public`);
@@ -43,7 +44,7 @@ async function start() {
                 sz: parseFloat(measurement.sz),
                 ts: parseInt(measurement.ts),
             };
-            console.log(measurement);
+            // console.log(measurement);
             addMeasurement(measurement);
         }
     });
@@ -58,20 +59,23 @@ async function runEveryMinute() {
 
     console.log(`Waiting ${delay} ms...`);
 
-    setTimeout(() => {
+    setTimeout(async () => {
         console.log("Minute reached!");
         const currentTimestamp = getTime(startOfMinute(new Date()));
 
         // Run next loop instantly
         runEveryMinute();
 
-        calculateAllAverages(currentTimestamp).then(() => {
-            const calculationDelay = differenceInMilliseconds(
-                new Date(),
-                currentTimestamp,
-            );
-            console.log(`Calculation delay: ${calculationDelay}`);
-        });
+        const promiseAverages = calculateAllAverages(currentTimestamp);
+        const promiseCorrelations = calculateAllCorrelations(currentTimestamp);
+
+        await Promise.all([promiseAverages, promiseCorrelations]);
+
+        const calculationDelay = differenceInMilliseconds(
+            new Date(),
+            currentTimestamp,
+        );
+        console.log(`Calculation delay: ${calculationDelay}`);
     }, delay);
 }
 

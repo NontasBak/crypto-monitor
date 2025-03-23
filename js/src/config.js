@@ -11,4 +11,6 @@ const SYMBOLS = [
 
 const MOVING_AVG_WINDOW = 15; // In minutes
 
-module.exports = { SYMBOLS, MOVING_AVG_WINDOW };
+const PEARSON_WINDOW = 8;
+
+module.exports = { SYMBOLS, MOVING_AVG_WINDOW, PEARSON_WINDOW };

@@ -21,3 +21,12 @@ model Average {
   average   Float
   timestamp BigInt
 }
+
+model Pearson {
+  id           Int    @id @default(autoincrement())
+  symbol1      String
+  symbol2      String
+  maxPearson   Float
+  timestamp    BigInt
+  maxTimestamp BigInt
+}
