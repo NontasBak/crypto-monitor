@@ -14,3 +14,10 @@ model Measurement {
   size      Float
   timestamp BigInt
 }
+
+model Average {
+  id        Int    @id @default(autoincrement())
+  symbol    String
+  average   Float
+  timestamp BigInt
+}
