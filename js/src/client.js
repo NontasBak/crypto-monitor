@@ -19,7 +19,9 @@ async function addMeasurement(data) {
 
 async function deleteDbRecords() {
     const deleteMeasurements = prisma.measurement.deleteMany();
-    await prisma.$transaction([deleteMeasurements]);
+    const deleteAverages = prisma.average.deleteMany();
+
+    await prisma.$transaction([deleteMeasurements, deleteAverages]);
 }
 
 async function getMeasurements(symbol, window, currentTimestamp) {
@@ -35,6 +37,7 @@ async function getMeasurements(symbol, window, currentTimestamp) {
                 },
             },
         });
+        return measurements;
     } catch (error) {
         console.log(error);
     }
@@ -42,7 +45,7 @@ async function getMeasurements(symbol, window, currentTimestamp) {
 
 async function addAverage(symbol, average, currentTimestamp) {
     try {
-        await prisma.movingAverage.create({
+        await prisma.average.create({
             data: {
                 symbol: symbol,
                 average: average,

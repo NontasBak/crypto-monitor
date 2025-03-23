@@ -1,9 +1,8 @@
 const { getMeasurements, addAverage } = require("./client");
-
-const MOVING_AVG_WINDOW = 15; // In minutes
+const { SYMBOLS, MOVING_AVG_WINDOW } = require("./config");
 
 async function calculateAverage(symbol, currentTimestamp) {
-    const measurements = getMeasurements(
+    const measurements = await getMeasurements(
         symbol,
         MOVING_AVG_WINDOW,
         currentTimestamp,
@@ -21,4 +20,21 @@ async function calculateAverage(symbol, currentTimestamp) {
     await addAverage(symbol, average, currentTimestamp);
 }
 
-module.exports = { calculateAverage };
+async function calculateAllAverages(currentTimestamp) {
+    const promises = [];
+    SYMBOLS.forEach((symbol) => {
+        promises.push(calculateAverage(symbol, currentTimestamp));
+    });
+
+    await Promise.all(promises);
+
+    // For testing:
+    // await new Promise((resolve) => {
+    //     setTimeout(() => {
+    //         console.log("womp");
+    //         resolve();
+    //     }, 3000);
+    // });
+}
+
+module.exports = { calculateAllAverages };

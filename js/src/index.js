@@ -5,6 +5,13 @@ require("dotenv").config();
 const { SYMBOLS } = require("./config.js");
 const { setup } = require("./setup.js");
 const { addMeasurement, deleteDbRecords } = require("./client.js");
+const {
+    differenceInMilliseconds,
+    addMinutes,
+    startOfMinute,
+    getTime,
+} = require("date-fns");
+const { calculateAllAverages } = require("./moving-average.js");
 
 async function start() {
     const ws = new WebSocket(`wss://ws.okx.com:8443/ws/v5/public`);
@@ -40,6 +47,32 @@ async function start() {
             addMeasurement(measurement);
         }
     });
+
+    runEveryMinute();
+}
+
+async function runEveryMinute() {
+    const now = new Date();
+    const nextMinute = addMinutes(startOfMinute(now), 1);
+    const delay = differenceInMilliseconds(nextMinute, now);
+
+    console.log(`Waiting ${delay} ms...`);
+
+    setTimeout(() => {
+        console.log("Minute reached!");
+        const currentTimestamp = getTime(startOfMinute(new Date()));
+
+        // Run next loop instantly
+        runEveryMinute();
+
+        calculateAllAverages(currentTimestamp).then(() => {
+            const calculationDelay = differenceInMilliseconds(
+                new Date(),
+                currentTimestamp,
+            );
+            console.log(`Calculation delay: ${calculationDelay}`);
+        });
+    }, delay);
 }
 
 async function main() {

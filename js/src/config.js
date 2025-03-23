@@ -9,4 +9,6 @@ const SYMBOLS = [
     "BNB-USDT",
 ];
 
-module.exports = { SYMBOLS };
+const MOVING_AVG_WINDOW = 15; // In minutes
+
+module.exports = { SYMBOLS, MOVING_AVG_WINDOW };
