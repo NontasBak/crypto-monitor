@@ -75,13 +75,15 @@ async function runEveryMinute() {
             new Date(),
             currentTimestamp,
         );
-        console.log(`Calculation delay: ${calculationDelay}`);
+        console.log(`Calculation delay: ${calculationDelay} ms`);
     }, delay);
 }
 
 async function main() {
     try {
-        await setup();
+        // We're going to use a database instead of writing the results in files
+        // so no setup is needed (you should have already ran the prisma migrations)
+        // await setup();
         start();
     } catch (error) {
         console.log(error);

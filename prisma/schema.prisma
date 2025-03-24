@@ -20,6 +20,7 @@ model Average {
   symbol    String
   average   Float
   timestamp BigInt
+  delay     Int
 }
 
 model Pearson {
@@ -29,4 +30,5 @@ model Pearson {
   maxPearson   Float
   timestamp    BigInt
   maxTimestamp BigInt
+  delay        Int
 }

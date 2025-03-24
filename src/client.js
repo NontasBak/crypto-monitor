@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { differenceInMilliseconds } = require("date-fns");
 
 const prisma = new PrismaClient();
 
@@ -50,11 +51,17 @@ async function getMeasurements(symbol, window, currentTimestamp) {
 
 async function addAverage(symbol, average, currentTimestamp) {
     try {
+        const calculationDelay = differenceInMilliseconds(
+            new Date(),
+            currentTimestamp,
+        );
+
         await prisma.average.create({
             data: {
                 symbol: symbol,
                 average: average,
                 timestamp: currentTimestamp,
+                delay: calculationDelay,
             },
         });
     } catch (error) {
@@ -111,6 +118,11 @@ async function addPearsonCorrelation(
     maxTimestamp,
 ) {
     try {
+        const calculationDelay = differenceInMilliseconds(
+            new Date(),
+            currentTimestamp,
+        );
+
         await prisma.pearson.create({
             data: {
                 symbol1: symbol1,
@@ -118,6 +130,7 @@ async function addPearsonCorrelation(
                 maxPearson: maxPearson,
                 timestamp: currentTimestamp,
                 maxTimestamp: maxTimestamp,
+                delay: calculationDelay,
             },
         });
     } catch (error) {

@@ -21,6 +21,7 @@ async function calculateAverage(symbol, currentTimestamp) {
     if (!average) {
         return;
     }
+
     await addAverage(symbol, average, currentTimestamp);
 }
 
